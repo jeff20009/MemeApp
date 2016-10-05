@@ -6,7 +6,11 @@
 //  Created by JeffChiu on 11/17/15.
 //  Copyright Â© 2015 JeffChiu. All rights reserved.
 
+
 import UIKit
+import Fabric
+import Crashlytics
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var memes = [Meme]()
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        Fabric.with([Crashlytics.self])
         
         // Customize all the different UI Elementes
         

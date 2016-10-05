@@ -11,6 +11,8 @@
 		1022EC0E1D5A968B0025A1F9 /* t3.png in Resources */ = {isa = PBXBuildFile; fileRef = 1022EC0B1D5A968B0025A1F9 /* t3.png */; };
 		1022EC0F1D5A968B0025A1F9 /* t1.png in Resources */ = {isa = PBXBuildFile; fileRef = 1022EC0C1D5A968B0025A1F9 /* t1.png */; };
 		1022EC111D5A977D0025A1F9 /* t2.png in Resources */ = {isa = PBXBuildFile; fileRef = 1022EC101D5A977D0025A1F9 /* t2.png */; };
+		10F8D39F1D6917AF005A6AEA /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10F8D39D1D6917AF005A6AEA /* Fabric.framework */; };
+		10F8D3A01D6917B0005A6AEA /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10F8D39E1D6917AF005A6AEA /* Crashlytics.framework */; };
 		C90F422F1ACB4B9900C01F82 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90F422E1ACB4B9900C01F82 /* CustomTableViewCell.swift */; };
 		C90F42351ACBA79A00C01F82 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90F42341ACBA79A00C01F82 /* CollectionViewController.swift */; };
 		C90F42371ACBA91700C01F82 /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90F42361ACBA91700C01F82 /* CustomCollectionViewCell.swift */; };
@@ -44,6 +46,8 @@
 		1022EC0B1D5A968B0025A1F9 /* t3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = t3.png; sourceTree = "<group>"; };
 		1022EC0C1D5A968B0025A1F9 /* t1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = t1.png; sourceTree = "<group>"; };
 		1022EC101D5A977D0025A1F9 /* t2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = t2.png; sourceTree = "<group>"; };
+		10F8D39D1D6917AF005A6AEA /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		10F8D39E1D6917AF005A6AEA /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		C90F422E1ACB4B9900C01F82 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		C90F42341ACBA79A00C01F82 /* CollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
 		C90F42361ACBA91700C01F82 /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -71,6 +75,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				10F8D3A01D6917B0005A6AEA /* Crashlytics.framework in Frameworks */,
+				10F8D39F1D6917AF005A6AEA /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,6 +111,8 @@
 		C94DDDC71AC4AC820039E51F /* MemeMe */ = {
 			isa = PBXGroup;
 			children = (
+				10F8D39D1D6917AF005A6AEA /* Fabric.framework */,
+				10F8D39E1D6917AF005A6AEA /* Crashlytics.framework */,
 				C9D610861ADCB7170063571C /* DetailViewController.swift */,
 				C9BCA4CC1AD745F900AB380F /* TemplatesTableView.swift */,
 				C90F42341ACBA79A00C01F82 /* CollectionViewController.swift */,
@@ -164,6 +172,7 @@
 				C94DDDC11AC4AC820039E51F /* Sources */,
 				C94DDDC21AC4AC820039E51F /* Frameworks */,
 				C94DDDC31AC4AC820039E51F /* Resources */,
+				10F8D39B1D691783005A6AEA /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -256,6 +265,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		10F8D39B1D691783005A6AEA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 2fa76459a602e5e63d6d32fa9070b4678c1003d7 c12585dea724ce0e133574c093732acc5c6631634a7cbbb9a7d82058c8f854f2";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C94DDDC11AC4AC820039E51F /* Sources */ = {
@@ -397,6 +422,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MemeMe",
+				);
 				INFOPLIST_FILE = MemeMe/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -410,6 +439,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MemeMe",
+				);
 				INFOPLIST_FILE = MemeMe/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
