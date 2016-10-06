@@ -86,8 +86,7 @@ class TemplatesTableViewController: UITableViewController {
 //        for i = 0, range(through: titles.count, by: 1){
         
         for i in 0..<titles.count{
-            print(i)
-//        for(var i = 0; i < titles.count; i++){
+            //print(i)
             
             // set the image
             let image = UIImage(named: "t\(i + 1).png")
