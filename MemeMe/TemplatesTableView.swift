@@ -77,14 +77,16 @@ class TemplatesTableViewController: UITableViewController {
         dismissViewControllerAnimated(false, completion: nil)
     }
     
-    // MARK: OTHER FUNCTIONS
+    // MARK:] OTHER FUNCTIONS
     // function to fill the templates array
     // this is much quicker than doing each template by itself
     func fillTemplates(){
         // iterates over each title, creates a new template and appends it to the array
         // update to the Swift 3.0
-        for i in 0.stride(through: titles.count, by: 1){
-
+//        for i = 0, range(through: titles.count, by: 1){
+        
+        for i in 0..<titles.count{
+            print(i)
 //        for(var i = 0; i < titles.count; i++){
             
             // set the image
