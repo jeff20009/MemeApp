@@ -26,7 +26,7 @@ class CustomCollectionViewCell : UICollectionViewCell {
         // Code from: http://stackoverflow.com/questions/25587713/how-to-set-imageview-in-circle-like-imagecontacts-in-swift-correctly
         memeImage.layer.borderWidth=1.0
         memeImage.layer.masksToBounds = false
-        memeImage.layer.borderColor = UIColor.whiteColor().CGColor
+        memeImage.layer.borderColor = UIColor.white.cgColor
         memeImage.layer.cornerRadius = 10
         memeImage.clipsToBounds = true
     }

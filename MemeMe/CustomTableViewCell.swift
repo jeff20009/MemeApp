@@ -31,7 +31,7 @@ class CustomTableViewCell : UITableViewCell {
         
         memeImage.layer.borderWidth = 1.0
         memeImage.layer.masksToBounds = false
-        memeImage.layer.borderColor = UIColor.whiteColor().CGColor
+        memeImage.layer.borderColor = UIColor.white.cgColor
         memeImage.layer.cornerRadius = 10
         memeImage.clipsToBounds = true
     }

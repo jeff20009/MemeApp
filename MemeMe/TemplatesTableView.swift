@@ -38,7 +38,7 @@ class TemplatesTableViewController: UITableViewController {
     // delegate View Conterller (in this case it will be the editor view
     var delegate: ViewController? = nil
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(false)
         
         // fill the templates array
@@ -46,17 +46,17 @@ class TemplatesTableViewController: UITableViewController {
     }
     
     // MARK: TableView Functions
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return templates.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // deque the cell as a custom table view cell
-        let cell = tableView.dequeueReusableCellWithIdentifier("MemeTableCell") as! CustomTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MemeTableCell") as! CustomTableViewCell
         
         // create a template
-        let template = templates[indexPath.row]
+        let template = templates[(indexPath as NSIndexPath).row]
         
         // Set the name and image
         cell.topText.text = template.title
@@ -66,15 +66,15 @@ class TemplatesTableViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // enable the share button in the Edit View
-        delegate?.leftBarButton.enabled = true
+        delegate?.leftBarButton.isEnabled = true
         
         // call the function in the edit view ViewController to display the chosen Meme
-        delegate?.showTemplate(templates[indexPath.row].image)
+        delegate?.showTemplate(templates[(indexPath as NSIndexPath).row].image)
         
         // dismiss the tableView
-        dismissViewControllerAnimated(false, completion: nil)
+        dismiss(animated: false, completion: nil)
     }
     
     // MARK:] OTHER FUNCTIONS

@@ -29,21 +29,21 @@ class DetailViewController: UIViewController {
         imageView.image = meme.memeImg;
         
         // hide the tab bar
-        self.tabBarController?.tabBar.hidden = true
+        self.tabBarController?.tabBar.isHidden = true
     }
     
     // handles back button being pressed
     @IBAction func goBack() {
         // pop to the root view controller
-        navigationController?.popToRootViewControllerAnimated(true)
+        navigationController?.popToRootViewController(animated: true)
     }
     
     // handles the edit button being pressed
-    @IBAction func editMeme(sender: UIBarButtonItem) {
+    @IBAction func editMeme(_ sender: UIBarButtonItem) {
         
         // instatiate and present the edit view controller
-        let editVC = storyboard?.instantiateViewControllerWithIdentifier("EditView") as! ViewController
-        presentViewController(editVC, animated: true, completion: {
+        let editVC = storyboard?.instantiateViewController(withIdentifier: "EditView") as! ViewController
+        present(editVC, animated: true, completion: {
             // call the function to set the meme to be edited in the edit view
             editVC.setForEditing(self.meme, index: self.index)
         })
@@ -53,11 +53,11 @@ class DetailViewController: UIViewController {
     @IBAction func deleteMeme(){
         
         // obtain the memes object array from the AppDelegate
-        let object = UIApplication.sharedApplication().delegate
+        let object = UIApplication.shared.delegate
         let appDelegate = object as! AppDelegate
         
         // remove the meme and go back one screen
-        appDelegate.memes.removeAtIndex(self.index)
+        appDelegate.memes.remove(at: self.index)
         goBack()
     }
 }

@@ -19,29 +19,29 @@ class FontPickerViewController : UIViewController, UITableViewDelegate, UITableV
     
     // get an array of all the fonts
     // from: http://giordanoscalzo.tumblr.com/post/95900320382/print-all-ios-fonts-in-swift
-    let fonts = UIFont.familyNames()
+    let fonts = UIFont.familyNames
     
     // MARK: Table View Data Source
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.fonts.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("FontCell")!
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FontCell")!
         // Set the text
-        cell.textLabel?.text = self.fonts[indexPath.row]
+        cell.textLabel?.text = self.fonts[(indexPath as NSIndexPath).row]
         
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-            let indexFont = self.fonts[indexPath.row]
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            let indexFont = self.fonts[(indexPath as NSIndexPath).row]
             font = UIFont(name: indexFont, size: 40)
             delegate?.setTextFont(font!)
-            self.dismissViewControllerAnimated(false, completion: nil)
+            self.dismiss(animated: false, completion: nil)
     }
     
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     

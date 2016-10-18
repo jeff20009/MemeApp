@@ -22,20 +22,20 @@ class CollectionViewController: UICollectionViewController {
     var memes: [Meme]! // array to hold all the saved memes
     var isEditingMeme = false // flag for when editing memes (in this case just to delete one or more)
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
         // get memes from AppDelegate
-        let object = UIApplication.sharedApplication().delegate
+        let object = UIApplication.shared.delegate
         let appDelegate = object as! AppDelegate
         memes = appDelegate.memes
         
         // set background color (had to be done here)
-        memeCollectionView.backgroundColor = UIColor.orangeColor()
+        memeCollectionView.backgroundColor = UIColor.orange
         
         // set initial properties
         rightBarButton.title = "Edit"
-        self.tabBarController?.tabBar.hidden = false
+        self.tabBarController?.tabBar.isHidden = false
         memeCollectionView.allowsMultipleSelection = false
         
         // deselect all selected cells
@@ -43,70 +43,70 @@ class CollectionViewController: UICollectionViewController {
     }
     
     // MARK: Collection View Functions
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return memes.count
     }
     
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MemeCollectionViewCell", forIndexPath: indexPath) as! CustomCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MemeCollectionViewCell", for: indexPath) as! CustomCollectionViewCell
         
-        let meme = memes[indexPath.row]
+        let meme = memes[(indexPath as NSIndexPath).row]
         cell.memeImage.image = meme.memeImg
         
         return cell
     }
     
     // handle what happens when collection view memes are selected
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath:NSIndexPath)
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath:IndexPath)
     {
         // check for flag, make sure not in editing mode (when deleting memes)
         if(!isEditingMeme){
             
             // if not editing, show the meme detail view
-            showDetailView(indexPath.row)
+            showDetailView((indexPath as NSIndexPath).row)
         }
         else {
             // if not, then we are editing, so we can select more than one cell.
-            let cell = collectionView.cellForItemAtIndexPath(indexPath) as! CustomCollectionViewCell
+            let cell = collectionView.cellForItem(at: indexPath) as! CustomCollectionViewCell
             
             // unhide the cells checkmark
-            cell.checkMark.hidden = false
+            cell.checkMark.isHidden = false
         }
     }
     
     // When editing, we can deselect a meme, so that it will no longer be highlited
-    override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
-        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! CustomCollectionViewCell
+    override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as! CustomCollectionViewCell
         
         // hide the checkmark
-        cell.checkMark.hidden = true
+        cell.checkMark.isHidden = true
     }
     
     // function that handles the deletion of the selected memes (when editing)
     func deleteMemes(){
         
         // get all the index paths for the selected items (if any have been selected)
-        if let indexPaths = collectionView?.indexPathsForSelectedItems() {
+        if let indexPaths = collectionView?.indexPathsForSelectedItems {
             
             // create the link to the app elegate, so we have access to
             // the memes object array
-            let object = UIApplication.sharedApplication().delegate
+            let object = UIApplication.shared.delegate
             let appDelegate = object as! AppDelegate
             
             // iterate over all index paths
-            for i in (indexPaths.count - 1).stride(through: 0, by: -1){
+            for i in stride(from: (indexPaths.count - 1), through: 0, by: -1){
                 // get the current indexPath
                 let indexPath = indexPaths[i] 
                 
                 // remove the meme from the saved memes array (in App Delegate)
-                appDelegate.memes.removeAtIndex(indexPath.row)
+                appDelegate.memes.remove(at: (indexPath as NSIndexPath).row)
                 
                 // remove the memes from the class's copy of the memes array
-                memes.removeAtIndex(indexPath.row)
+                memes.remove(at: (indexPath as NSIndexPath).row)
                 
                 // remove the item from the collection view
-                collectionView?.deleteItemsAtIndexPaths([indexPath])
+                collectionView?.deleteItems(at: [indexPath])
             }
         }
     }
@@ -114,10 +114,10 @@ class CollectionViewController: UICollectionViewController {
     // MARK: OTHER FUNCTIONS
     
     // function to show the detailed view controller
-    func showDetailView(index: Int){
+    func showDetailView(_ index: Int){
         
         // instantiate the view, set the properties and push
-        let detailVC = self.storyboard?.instantiateViewControllerWithIdentifier("DetailViewController") as! DetailViewController
+        let detailVC = self.storyboard?.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
         
         // set the meme to display and its index in the detailed view
         detailVC.meme = memes[index]
@@ -131,13 +131,13 @@ class CollectionViewController: UICollectionViewController {
     func deselectAll(){
         
         // get all the index paths
-        if let selectedRowPaths = memeCollectionView.indexPathsForSelectedItems() {
+        if let selectedRowPaths = memeCollectionView.indexPathsForSelectedItems {
             // iterate over each index path
             for indexPath in selectedRowPaths {
                 // get the cell and deselect
-                let cell = memeCollectionView.cellForItemAtIndexPath(indexPath) as! CustomCollectionViewCell
-                cell.checkMark.hidden = true
-                memeCollectionView.deselectItemAtIndexPath(indexPath, animated: false)
+                let cell = memeCollectionView.cellForItem(at: indexPath) as! CustomCollectionViewCell
+                cell.checkMark.isHidden = true
+                memeCollectionView.deselectItem(at: indexPath, animated: false)
             }
         }
     }
@@ -145,7 +145,7 @@ class CollectionViewController: UICollectionViewController {
     // MARK: @IBAction Functions
     // handle right nav bar button presses
     // this is for when the "Edit Button is pressed"
-    @IBAction func rightNavBarButtonAction(sender: UIBarButtonItem) {
+    @IBAction func rightNavBarButtonAction(_ sender: UIBarButtonItem) {
         
         // check if in editing mode or not
         if(!isEditingMeme){
@@ -155,7 +155,7 @@ class CollectionViewController: UICollectionViewController {
             memeCollectionView.allowsMultipleSelection = true
             
             // hide the tab bar
-            self.navigationController?.tabBarController?.tabBar.hidden = true
+            self.navigationController?.tabBarController?.tabBar.isHidden = true
             
             // change button titles
             leftBarButton.title = "Delete"
@@ -169,7 +169,7 @@ class CollectionViewController: UICollectionViewController {
             leftBarButton.title = "Back"
             
             // unhide the tab bar
-            self.navigationController?.tabBarController?.tabBar.hidden = false
+            self.navigationController?.tabBarController?.tabBar.isHidden = false
             
             // reset editing flag
             isEditingMeme = false
@@ -180,7 +180,7 @@ class CollectionViewController: UICollectionViewController {
     }
     
     // handle the left navigation button being pressed
-    @IBAction func leftNavBarButtonAction(sender: UIBarButtonItem) {
+    @IBAction func leftNavBarButtonAction(_ sender: UIBarButtonItem) {
         
         // check if we are editing or going back
         if(isEditingMeme){
@@ -200,8 +200,8 @@ class CollectionViewController: UICollectionViewController {
             // button was pressed when it said "Back"
             
             // go back to the Edit View View Controller
-            let editVC = storyboard?.instantiateViewControllerWithIdentifier("EditView") as! ViewController
-            presentViewController(editVC, animated: true, completion: nil)
+            let editVC = storyboard?.instantiateViewController(withIdentifier: "EditView") as! ViewController
+            present(editVC, animated: true, completion: nil)
         }
     }
 }

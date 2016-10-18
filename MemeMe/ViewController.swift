@@ -52,17 +52,17 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
     // MARK: Overriden View Functions
     // BELOW ARE ALL THE FUNCTIONS THAT ARE RELATED TO THE VIEW
     // =========================================================================
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         // subscribe to keyboard notifications
         self.subscribeToKeyboardNotifications()
         
         // disable camera button in simulator
-        cameraButton.enabled = UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)
+        cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         // unsubscribe from keyboard functions
@@ -73,7 +73,7 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
         super.viewDidLoad()
         
         // get memes array from AppDelegate
-        let object = UIApplication.sharedApplication().delegate
+        let object = UIApplication.shared.delegate
         let appDelegate = object as! AppDelegate
         memes = appDelegate.memes
         
@@ -81,20 +81,20 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
         scrollView.delegate = self
         
         // add imageView to the scrollView
-        imageView.frame = CGRectMake(0, 0, scrollView.frame.size.width, scrollView.frame.size.width)
+        imageView.frame = CGRect(x: 0, y: 0, width: scrollView.frame.size.width, height: scrollView.frame.size.width)
         
         // enable user interactions
-        imageView.userInteractionEnabled = true
+        imageView.isUserInteractionEnabled = true
         
         // add imageView
         scrollView.addSubview(imageView)
         
         // set text field attributes
         let memeTextAttributes = [
-            NSStrokeColorAttributeName : UIColor.blackColor(),
-            NSForegroundColorAttributeName :UIColor.whiteColor(),
+            NSStrokeColorAttributeName : UIColor.black,
+            NSForegroundColorAttributeName :UIColor.white,
             NSFontAttributeName : UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
-            NSStrokeWidthAttributeName : NSNumber(float: -3.0)
+            NSStrokeWidthAttributeName : NSNumber(value: -3.0 as Float)
         ]
         
         // rectangle frame for the textfields
@@ -111,8 +111,8 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
         bottomTextField.delegate = self
         topTextField.tag = 1
         bottomTextField.tag = 2
-        topTextField.textAlignment = .Center
-        bottomTextField.textAlignment = .Center
+        topTextField.textAlignment = .center
+        bottomTextField.textAlignment = .center
         
         topTextField.adjustsFontSizeToFitWidth = true
         bottomTextField.adjustsFontSizeToFitWidth = true
@@ -122,8 +122,8 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
         
         // set autocapitalization for textfields
         // from: http://stackoverflow.com/questions/21092182/uppercase-characters-in-uitextfield
-        topTextField.autocapitalizationType = UITextAutocapitalizationType.AllCharacters
-        topTextField.autocapitalizationType = UITextAutocapitalizationType.AllCharacters
+        topTextField.autocapitalizationType = UITextAutocapitalizationType.allCharacters
+        topTextField.autocapitalizationType = UITextAutocapitalizationType.allCharacters
 
         topTextField.center.x = self.view.center.x
         topTextField.center.y = self.view.frame.origin.y + 150
@@ -140,8 +140,8 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
         
         // disable share button and back button if no memes are present
         if(memes.count == 0) {
-            leftBarButton.enabled = false
-            rightBarButton.enabled = false
+            leftBarButton.isEnabled = false
+            rightBarButton.isEnabled = false
         }
         
         // add gesture recogizers so that the textfields can me moved with the finger
@@ -174,20 +174,20 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
     
     // handle the dragging of text
     // from: http://stackoverflow.com/questions/24758671/swift-moving-and-releasing-object-with-touch
-    func dragText(recognizer: UIPanGestureRecognizer) {
+    func dragText(_ recognizer: UIPanGestureRecognizer) {
         
         // determine what texfield was dragged and set it to textField
         let textField = (recognizer.view?.tag == 2) ? bottomTextField : topTextField
         
         // obtain the location of the recognizer as a point
-        let point = recognizer.locationInView(self.view)
+        let point = recognizer.location(in: self.view)
         
         // set the textfield's location to this point
-        textField.center.x = point.x
+        textField?.center.x = point.x
         
         // only allow textfields to move in between the nav bar and the tool bar
         if(!(point.y > self.view.frame.height - 64) && !(point.y < 84)){
-            textField.center.y = point.y
+            textField?.center.y = point.y
         }
     }
     
@@ -201,8 +201,8 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
     // this function sets the various properties of the scrollview (for zooming and content size) based on the image that the imageView is displaying.
     func setScrollView(){
         let image = imageView.image
-        imageView.contentMode = UIViewContentMode.Center
-        imageView.frame = CGRectMake(0, 0, image!.size.width, image!.size.height)
+        imageView.contentMode = UIViewContentMode.center
+        imageView.frame = CGRect(x: 0, y: 0, width: image!.size.width, height: image!.size.height)
         
         scrollView.contentSize = image!.size
         
@@ -244,11 +244,11 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
         
     }
     
-    func scrollViewDidZoom(scrollView: UIScrollView) {
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
         centerScrollViewContents()
     }
     
-    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
     
@@ -259,18 +259,18 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
     
     // subscribe to keyboard notifications
     func subscribeToKeyboardNotifications() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.keyboardWillShow(_:))    , name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.keyboardWillHide(_:))    , name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillShow(_:))    , name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide(_:))    , name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     // unsubscribe to keyboard notifications
     func unsubscribeFromKeyboardNotifications() {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     // function to move the view and its contents up when the keyboard is shown
-    func keyboardWillShow(notification: NSNotification) {
+    func keyboardWillShow(_ notification: Notification) {
         // check that we are only editing the bottom textfield
         if(editingBottom){
             // move view up
@@ -279,7 +279,7 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
     }
     
     // function that moves the view and its contents back down when the keyboard is hidden
-    func keyboardWillHide(notification: NSNotification) {
+    func keyboardWillHide(_ notification: Notification) {
         // check that we are only editing the bottom textfield
         if(editingBottom){
             // move view down
@@ -290,10 +290,10 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
     }
     
     // function that gets the height of the keyboard
-    func getKeyboardHeight(notification: NSNotification) -> CGFloat {
-        let userInfo = notification.userInfo
+    func getKeyboardHeight(_ notification: Notification) -> CGFloat {
+        let userInfo = (notification as NSNotification).userInfo
         let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
-        return keyboardSize.CGRectValue().height
+        return keyboardSize.cgRectValue.height
     }
     
     // =========================================================================
@@ -301,7 +301,7 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
     // BELOW ARE ALL THE FUNCTIONS THAT ARE RELATED TO THE TEXTFIELDS
     // =========================================================================
     
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         // Force only upper case letters
         // Used a combination of the following sources:
@@ -311,9 +311,9 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
         
         let textFieldText = textField.text! as NSString
         
-        if let lowCharRange = string.rangeOfCharacterFromSet(NSCharacterSet.lowercaseLetterCharacterSet()) {
+        if let lowCharRange = string.rangeOfCharacter(from: CharacterSet.lowercaseLetters) {
             
-            textField.text = textFieldText.stringByReplacingCharactersInRange(range, withString: string.uppercaseString)
+            textField.text = textFieldText.replacingCharacters(in: range, with: string.uppercased())
             
             
             return false
@@ -323,12 +323,12 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
         }
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
     
-    func textFieldDidBeginEditing(textField: UITextField) {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
         
         // If the text is either TOP of BOTTOM, remove when editing
         if(textField.text == "TOP"){
@@ -344,7 +344,7 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
         }
     }
     
-    func textFieldDidEndEditing(textField: UITextField) {
+    func textFieldDidEndEditing(_ textField: UITextField) {
         
         // If text fields are left empty after editing, replace contents with default text
         if(textField.text == ""){
@@ -357,7 +357,7 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
         }
         
         // make sure text is uppercase
-        textField.text = textField.text!.uppercaseString
+        textField.text = textField.text!.uppercased()
         
         textField.resignFirstResponder()
     }
@@ -368,28 +368,28 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
     // =========================================================================
     
     // function for the imagePicker controller
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]){
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]){
         
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             imageView.image = image
             setScrollView()
             centerScrollViewContents()
-            leftBarButton.enabled = true
+            leftBarButton.isEnabled = true
         }
         
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
     }
     
     // pick image from photo library
     func pickImage() {
         let pickerController = UIImagePickerController()
         pickerController.delegate = self
-        pickerController.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
-        self.presentViewController(pickerController, animated: true, completion: nil)
+        pickerController.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        self.present(pickerController, animated: true, completion: nil)
     }
 
     // =========================================================================
@@ -397,7 +397,7 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
     // BELOW ARE ALL THE FUNCTIONS THAT ARE RELATED TO GENERATING AND SAVING MEMES
     // =========================================================================
     
-    func save(activityType:String?, completed: Bool, returnedItems: [AnyObject]?, error: NSError?) {
+    func save(_ activityType:String?, completed: Bool, returnedItems: [AnyObject]?, error: NSError?) {
         //Create the meme
         if completed {
             
@@ -416,7 +416,7 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
             )
             
             // Add it to the memes array in the Application Delegate
-            let object = UIApplication.sharedApplication().delegate
+            let object = UIApplication.shared.delegate
             let appDelegate = object as! AppDelegate
             
             // check if this is not a meme that was previously saved and we are editing
@@ -444,13 +444,13 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
         // this additive variable is based on the screen orientation
         var additive = CGFloat(64.0)
         
-        if(UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation)){
+        if(UIDeviceOrientationIsLandscape(UIDevice.current.orientation)){
             additive = 44
         }
         
         // hide nav bar and tool bar
-        mainToolbar.hidden = true
-        navigationBar.hidden = true
+        mainToolbar.isHidden = true
+        navigationBar.isHidden = true
         
         // get the scroll views frame
         let frame = scrollView.frame
@@ -459,21 +459,21 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
         UIGraphicsBeginImageContext(frame.size)
         
         // this rectangle will only cover the parts of the screen that we want as an image
-        let rectangle = CGRectMake(
-            scrollView.frame.origin.x,
-            self.scrollView.frame.origin.y - 44 - additive - 20,
-            self.scrollView.frame.width,
-            self.scrollView.frame.height + additive + 44
+        let rectangle = CGRect(
+            x: scrollView.frame.origin.x,
+            y: self.scrollView.frame.origin.y - 44 - additive - 20,
+            width: self.scrollView.frame.width,
+            height: self.scrollView.frame.height + additive + 44
         )
         
-        self.view.drawViewHierarchyInRect(rectangle, afterScreenUpdates: true)
+        self.view.drawHierarchy(in: rectangle, afterScreenUpdates: true)
         
-        let memedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()
+        let memedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         
         // show the toolbar and nav bar
-        mainToolbar.hidden = false
-        navigationBar.hidden = false
+        mainToolbar.isHidden = false
+        navigationBar.isHidden = false
         
         return memedImage
     }
@@ -482,7 +482,7 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
     // MARK: Functions When Editing a Saved Meme
     // =========================================================================
     // function to set the screen with the meme to be edited
-    func setForEditing(meme: Meme, index: Int){
+    func setForEditing(_ meme: Meme, index: Int){
         // set the image and textfields
         imageView.image = meme.originalImg
         setTextFont(meme.font)
@@ -519,54 +519,54 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
     // Override the iPhone behavior that presents a popover as fullscreen
     // Used with the font and color pickers
     // From: https://github.com/EthanStrider/iOS-Projects/tree/master/ColorPickerExample
-    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         // Return no adaptive presentation style, use default presentation behaviour
-        return .None
+        return .none
     }
     
     // set the color of the textfields and the color picker button
-    func setTextColor (color: UIColor) {
+    func setTextColor (_ color: UIColor) {
         // set texfield colors
         topTextField.textColor = color
         bottomTextField.textColor  = color
         
         // set the color of the colorpicker button
-        colorPick.setTitleColor(color, forState: UIControlState.Normal)
+        colorPick.setTitleColor(color, for: UIControlState())
     }
     
     // set the textfield fonts
-    func setTextFont(font: UIFont){
+    func setTextFont(_ font: UIFont){
         topTextField.font = font
         bottomTextField.font = font
     }
     
     // go to the tab view
     func goToTabBarView(){
-        let tabBarVC = storyboard?.instantiateViewControllerWithIdentifier("tabBarView") as! UITabBarController
-        presentViewController(tabBarVC, animated: false, completion: nil)
+        let tabBarVC = storyboard?.instantiateViewController(withIdentifier: "tabBarView") as! UITabBarController
+        present(tabBarVC, animated: false, completion: nil)
     }
     
     // show a template image in the image view
-    func showTemplate(image: UIImage){
+    func showTemplate(_ image: UIImage){
         imageView.image = image
         setScrollView()
     }
     
     // view the templates picker table view
     func viewTemplates() {
-        let templatesVC = storyboard?.instantiateViewControllerWithIdentifier("TemplatesTableView") as! TemplatesTableViewController
+        let templatesVC = storyboard?.instantiateViewController(withIdentifier: "TemplatesTableView") as! TemplatesTableViewController
         templatesVC.delegate = self
-        presentViewController(templatesVC, animated: false, completion: nil)
+        present(templatesVC, animated: false, completion: nil)
     }
     
     // show an alert
-    func showAlert(title: String, message: String){
+    func showAlert(_ title: String, message: String){
         let alertController = UIAlertController(title: title, message:
-            message, preferredStyle: UIAlertControllerStyle.Alert)
+            message, preferredStyle: UIAlertControllerStyle.alert)
         
-        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
         
-        self.presentViewController(alertController, animated: true, completion: nil)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     // =========================================================================
@@ -575,7 +575,7 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
     // =========================================================================
     
     // handle the rigt bar button when canceling the editing of a saved meme
-    @IBAction func handleRightBarButton(sender: UIBarButtonItem) {
+    @IBAction func handleRightBarButton(_ sender: UIBarButtonItem) {
         // set title and go back to the tab bar view
         goToTabBarView()
     }
@@ -585,76 +585,76 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
     @IBAction func pickImageChoices(){
         
         // create a new action sheet alert
-        let pickAlert = UIAlertController(title: "Choose Source", message: "", preferredStyle: UIAlertControllerStyle.ActionSheet)
+        let pickAlert = UIAlertController(title: "Choose Source", message: "", preferredStyle: UIAlertControllerStyle.actionSheet)
         
         // photo album choice
-        pickAlert.addAction(UIAlertAction(title: "Photo Album", style: .Default, handler: { (action: UIAlertAction) in
+        pickAlert.addAction(UIAlertAction(title: "Photo Album", style: .default, handler: { (action: UIAlertAction) in
             // show the photo album
             self.pickImage()
         }))
         
         // template image choice
-        pickAlert.addAction(UIAlertAction(title: "Meme Templates", style: .Default, handler: { (action: UIAlertAction) in
+        pickAlert.addAction(UIAlertAction(title: "Meme Templates", style: .default, handler: { (action: UIAlertAction) in
             // show templates table view
             self.viewTemplates()
         }))
         
         // present the action sheet
-        presentViewController(pickAlert, animated: true, completion: nil)
+        present(pickAlert, animated: true, completion: nil)
     }
     
     // pick image from camera when camera button is pressed
-    @IBAction func pickAnImageFromCamera (sender: UIBarButtonItem) {
+    @IBAction func pickAnImageFromCamera (_ sender: UIBarButtonItem) {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
-        imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
-        self.presentViewController(imagePicker, animated: true, completion: nil)
+        imagePicker.sourceType = UIImagePickerControllerSourceType.camera
+        self.present(imagePicker, animated: true, completion: nil)
     }
     
     // handle the color picker button
     // from: https://github.com/EthanStrider/iOS-Projects/tree/master/ColorPickerExample
-    @IBAction func colorPickerButton(sender: UIButton) {
+    @IBAction func colorPickerButton(_ sender: UIButton) {
         
-        let popoverVC = storyboard?.instantiateViewControllerWithIdentifier("colorPickerPopover") as! ColorPickerViewController
+        let popoverVC = storyboard?.instantiateViewController(withIdentifier: "colorPickerPopover") as! ColorPickerViewController
         
-        popoverVC.modalPresentationStyle = .Popover
+        popoverVC.modalPresentationStyle = .popover
         
-        popoverVC.preferredContentSize = CGSizeMake(284, 446)
+        popoverVC.preferredContentSize = CGSize(width: 284, height: 446)
         
         if let popoverController = popoverVC.popoverPresentationController {
             popoverController.sourceView = sender
             popoverController.sourceRect = CGRect(x: 0, y: 0, width: 85, height: 30)
-            popoverController.permittedArrowDirections = .Any
+            popoverController.permittedArrowDirections = .any
             popoverController.delegate = self
             popoverVC.delegate = self
         }
         
-        presentViewController(popoverVC, animated: false, completion: nil)
+        present(popoverVC, animated: false, completion: nil)
         
     }
     
     // handle font picker button
     // used modified code from: https://github.com/EthanStrider/iOS-Projects/tree/master/ColorPickerExample
-    @IBAction func fontPickerButton(sender: UIButton) {
+    @IBAction func fontPickerButton(_ sender: UIButton) {
         
-        let popoverVC = storyboard?.instantiateViewControllerWithIdentifier("fontPickerPopover") as! FontPickerViewController
+        let popoverVC = storyboard?.instantiateViewController(withIdentifier: "fontPickerPopover") as! FontPickerViewController
         
-        popoverVC.modalPresentationStyle = .Popover
+        popoverVC.modalPresentationStyle = .popover
         
-        popoverVC.preferredContentSize = CGSizeMake(284, 446)
+        popoverVC.preferredContentSize = CGSize(width: 284, height: 446)
         
         if let popoverController = popoverVC.popoverPresentationController {
             popoverController.sourceView = sender
             popoverController.sourceRect = CGRect(x: 0, y: 0, width: 85, height: 30)
-            popoverController.permittedArrowDirections = .Any
+            popoverController.permittedArrowDirections = .any
             popoverController.delegate = self
             popoverVC.delegate = self
         }
-        presentViewController(popoverVC, animated: false, completion: nil)
+        present(popoverVC, animated: false, completion: nil)
     }
     
     // handle the share memes button
-    @IBAction func shareMeme(sender: UIBarButtonItem) {
+    @IBAction func shareMeme(_ sender: UIBarButtonItem) {
         
         // check if there is an image present
         if imageView.image != nil {
@@ -667,7 +667,7 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
             // 2) next we present the activity view controller
             let objectsToShare = [memeImg]
             let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-            self.presentViewController(activityVC, animated: true, completion: nil)
+            self.present(activityVC, animated: true, completion: nil)
             
             // 3) and last, we save the image
             activityVC.completionWithItemsHandler = save
