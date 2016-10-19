@@ -311,7 +311,7 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
         
         let textFieldText = textField.text! as NSString
         
-        if let lowCharRange = string.rangeOfCharacter(from: CharacterSet.lowercaseLetters) {
+        if string.rangeOfCharacter(from: CharacterSet.lowercaseLetters) != nil {
             
             textField.text = textFieldText.replacingCharacters(in: range, with: string.uppercased())
             
@@ -670,12 +670,8 @@ UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIScrol
             self.present(activityVC, animated: true, completion: nil)
             
             // 3) and last, we save the image
-            activityVC.completionWithItemsHandler = save
-            
-        }
-        else {
-            // no image present, show alert
-            showAlert("Error", message: "Must Select an Image First!")
+
+
         }
     }
 }
