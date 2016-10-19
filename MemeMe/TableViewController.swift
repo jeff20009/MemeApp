@@ -40,7 +40,7 @@ class TableViewController: UITableViewController {
             // the edit view in such short time
             // from: http://stackoverflow.com/questions/8563473/unbalanced-calls-to-begin-end-appearance-transitions-for-uitabbarcontroller
             
-            if let hostView = self.view {
+            if (self.view) != nil {
                 DispatchQueue.main.async {
                     self.goToEditView()
                 }
